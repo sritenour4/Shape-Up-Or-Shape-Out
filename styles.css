@@ -1,0 +1,48 @@
+.btn {
+    border: solid 1px;  
+}
+
+#shape-container {
+    width: 600px;
+    height: 600px;
+    background-color: lightgreen;
+    border: gray solid;   
+    position: relative; 
+    
+}
+
+#sidepanel-container {   
+    margin-left: 75px;
+    background-color: lightgreen;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: gray;
+}
+
+.square {
+    position: absolute;
+    background-color: red;
+}
+
+.rectangle {
+    position: absolute;
+    background-color: green; 
+}
+
+.circle {
+    position: absolute;
+    background-color: purple;
+    border-radius: 50%;
+}
+
+triangle {
+    position: absolute;
+    background-color: yellow;
+}
+
+
