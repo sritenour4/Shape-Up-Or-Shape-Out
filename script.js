@@ -1,13 +1,13 @@
 const container = document.getElementsByClassName('container');
 const shapeContainer = document.getElementById('shape-container');
-
+// Sidepanel variables
 const shapeName = document.getElementById('sidepanel-shape-name');
 const width = document.getElementById('sidepanel-width');
 const height = document.getElementById('sidepanel-height');
 const radius = document.getElementById('sidepanel-radius');
 const area = document.getElementById('sidepanel-area')
 const perimeter = document.getElementById('sidepanel-perimeter')
-
+// Buttons
 const rectangleBtn = document.getElementById('rectangle-btn');
 const squareBtn = document.getElementById('square-btn');
 const circleBtn = document.getElementById('circle-btn');
@@ -17,151 +17,129 @@ class Shape {
     constructor(height, width) {
         this.height = height;
         this.width = width;
-
         this.div = document.createElement('div');
         this.div.className = 'shape';  
-        this.getRandomLocation();     
-        this.div.style.left = `${height}px`;
-        this.div.style.top = `${width}px`;
-        shapeContainer.appendChild(this.div);
-        
+        this.addEvents();
+        this.render();    
+        shapeContainer.appendChild(this.div); 
     }   
-    getRandomLocation() {
-        let x = Math.floor(Math.random() * 600);
-        let y = Math.floor(Math.random() * 600);
-        this.div.style.left = `${x}px`;
-        this.div.style.top = `${y}px`;            
-    }
-      
 
-}
+    addEvents() {
+        this.div.addEventListener('dblclick', () => this.destroy());
+        this.div.addEventListener('click', () => this.describe());
+    }
+
+    render() {
+        this.div.style.top = `${this.getRandomPos(this.height)}px`;
+        this.div.style.left = `${this.getRandomPos(this.width)}px`;
+        this.div.style.height = `${this.height}px`;
+        this.div.style.width = `${this.width}px`;        
+    };           
+
+    describe() {
+        shapeName.innerText = this.div.className;
+        width.innerText = this.width;
+        height.innerText = this.height;        
+    }
+
+    destroy() {
+        this.div.remove();
+        document.getElementsByClassName('sidepanel-labels').innerText = " ";  // not clearing the text ?
+    }
+
+    getRandomPos(offset) {
+        return Math.floor(Math.random() * (600 - offset));                    
+    }     
+
+};
 
 class Square extends Shape {
-    constructor(length) {
-        super(height, width);
-        this.length = length;
-
-        this.div = document.createElement('div');
-        this.div.className = 'square';
-        this.div.style.width = `${length}px`;
-        this.div.style.height = `${length}px`;
-        this.getRandomLocation();
-        shapeContainer.appendChild(this.div);
-        this.div.addEventListener('click', () => this.describe());
-        this.div.addEventListener('dblclick', () => this.div.remove);
-        
+    constructor(side) {
+        super(side, side);
+        this.side = side;
+        this.div.className = 'square';       
+        this.area = this.side * this.side;
+        this.perimeter = (2 * this.side) + (2 * this.side);        
     }
+
     describe() {
-        shapeName.innerText = this.className;
-        width.innerText = this.length;
-        height.innerText = this.length;
-        let rad = (this.length / 2) * 1.414;
-        radius.innerText = rad;
-        let a = this.length * this.length;
-        area.innerText = a;
-        let p = this.length * 4;
-        perimeter.innerText = p;
+        super.describe();
+        area.innerText = this.area;
+        perimeter.innerText = this.perimeter;        
     }
-
 }
 
 class Rectangle extends Shape {
     constructor(height, width) {
         super(height, width);
-
-        this.div = document.createElement('div');
-        this.div.className = 'rectangle';
-        this.div.style.height = `${height}px`;
-        this.div.style.width = `${width}px`;
-        this.getRandomLocation();
-        shapeContainer.appendChild(this.div);
-        this.div.addEventListener('click', () => this.describe());
-        this.div.addEventListener('dblclick', () => this.div.remove);
+        this.div.className = 'rectangle'; 
+        this.area = this.height * this.width;  
+        this.perimeter = (this.width * 2) + (this.height * 2);   
     }
 
     describe() {
-        shapeName.innerText = this.className;
-        width.innerText = this.width;
-        height.innerText = this.height;
-        // let rad = (this.length / 2) * 1.414;
-        // radius.innerText = rad;
-        let a = this.height * this.width;
-        area.innerText = a;
-        let p = (this.width * 2) + (this.height * 2);
-        perimeter.innerText = p;
+        super.describe();
+        area.innerText = this.area;
+        perimeter.innerText = this.perimeter;    
     }
 }
 
 class Circle extends Shape {
     constructor(radius) {
-        super(height, width);
-        this.radius = radius; 
-        
-        this.div = document.createElement('div');
+        super(radius * 2, radius * 2);
+        this.radius = radius;                
         this.div.className = 'circle';
-        this.div.style.borderBottom= `${radius}px solid rgb(253, 237, 91)`;        
-        this.div.style.borderRight = `${radius}px solid transparent`; 
-        this.getRandomLocation();
-        shapeContainer.appendChild(this.div);
-        this.div.addEventListener('click', () => this.describe());
-        this.div.addEventListener('dblclick', () => this.div.remove);
+        this.area = Math.PI * Math.pow(this.radius, 2);
+        this.perimeter = 2 * Math.PI * this.radius; 
+        
     }
 
     describe() {
-        shapeName.innerText = this.className;
-        // width.innerText = this.length;
-        // height.innerText = this.length;
-        // let rad = (this.length / 2) * 1.414;
-        radius.innerText = this.radius;
-        let a = Math.pow(Math.PI * (this.radius * this.radius))
-        area.innerText = a;
-        let p = Math.pow(2 * Math.PI * this.radius);
-        perimeter.innerText = p;
+        super.describe();     
+        radius.innerText = this.radius;   
+        area.innerText = this.area;
+        perimeter.innerText = this.perimeter;
     }
 }
 
 class Triangle extends Shape {
     constructor(height) {
-        super(height, width);
-
-        this.div = document.createElement('div');
+        super(height, height);
         this.div.className = 'triangle';
-        shapeContainer.appendChild(this.div);
-        this.getRandomLocation();
-        this.div.addEventListener('click', () => this.describe());
-        this.div.addEventListener('dblclick', () => this.div.remove);
+        this.div.style.height = "0px";
+        this.div.style.width = "0px";
+        this.div.style.borderTop = `${this.height}px solid #0091ea`;
+        this.div.style.borderRight = `${this.height}px solid transparent`;
+        this.area = 0.5 * this.height * this.height;
+        this.perimeter = (2 * this.height + Math.sqrt(2) * this.height);
     }
 
     describe() {
-        shapeName.innerText = this.className;
-        //width.innerText = this.width;
-        height.innerText = this.height;
+        super.describe();        
         radius.innerText = this.radius;
-        let a = 0.5 * this.height * this.height
-        area.innerText = a;
-        let p = (2 * this.height + (Math.pow.Square(2)) * this.height);
-        perimeter.innerText = p;
-    
+        area.innerText = this.area;
+        perimeter.innerText = this.perimeter;    
 }};
 
+
 squareBtn.addEventListener('click', () => {
-    const squareLengthInput = document.getElementById('square-length');
-    new Square(squareLengthInput);
+    const side = document.getElementById('square-length').value;
+    new Square(side);    
 })
 
 rectangleBtn.addEventListener('click', () => {
-    const rectangleHeightInput = document.getElementById('rectangle-height');
-    const rectangleWidthInput = document.getElementById('rectangle-width');
-    new Rectangle(rectangleHeightInput, rectangleWidthInput);
+    const height = document.getElementById('rectangle-height').value;
+    const width = document.getElementById('rectangle-width').value;
+    new Rectangle(height, width);
 })
 
 circleBtn.addEventListener('click', () => {
-    const circleRadiusInput = document.getElementById('circle-radius');
-    new Circle(circleRadiusInput); 
+    const radius = document.getElementById('circle-radius').value;
+    new Circle(radius); 
 })
 
 triangleBtn.addEventListener('click', () => {
-    const triangleHeightInput = document.getElementById('triangle-height');
-    new Triangle(triangleHeightInput);
+    const height = document.getElementById('triangle-height').value;
+    new Triangle(height);
 })
 

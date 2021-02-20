@@ -40,9 +40,13 @@ h1 {
     border-radius: 50%;
 }
 
-triangle {
+.triangle {
     position: absolute;
     background-color: yellow;
+    
 }
 
-
+.shape {
+    position: absolute;
+    background-color: red;
+}
